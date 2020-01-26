@@ -13,13 +13,16 @@ php artisan ide-helper:generate
 ```
 
 
-**TODO:**
+**TODO backend:**
 - [x] Init project
 - [x] Init Docker
-- [x] Create first tests and models
-- [ ] Write next tasks
+- [ ] Create first tests and models
 
-Model | Migration & Seeder | Tests
------------- | ------------- | -------------
-Project | + | -
-User | + | -
+**TODO frontend:**
+- [ ] Create a layout
+- [ ] Create a basic views for existing controllers
+
+Model | Migration & Seeder | Tests | Views
+------------ | ------------- | ------------- | -------------
+Project | + | + | -
+User | + | - | -
