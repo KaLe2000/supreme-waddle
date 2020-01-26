@@ -6,34 +6,35 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
 
-class ProjectsTest extends TestCase
+class ManageProjectsTest extends TestCase
 {
     use RefreshDatabase;
 
     /** @test */
-    public function guest_cannot_create_a_projects()
+    public function guest_cannot_manage_the_projects()
     {
 //        $this->withoutExceptionHandling();
-        $project = factory('App\Project')->raw();
-
-        $this->post('/projects', $project)->assertRedirect('/login');
-    }
-
-    /** @test */
-    public function guest_cannot_view_a_projects()
-    {
         $project = factory('App\Project')->create();
+
+        $this->get('/projects')->assertRedirect('/login');
+
+        $this->get('/projects/create')->assertRedirect('/login');
+
         $this->get($project->path())->assertRedirect('/login');
+
+        $this->post('/projects', $project->toArray())->assertRedirect('/login');
     }
 
     /**
      * @test
      * @return void
      */
-    public function only_authenticated_users_can_create_projects()
+    public function only_authenticated_users_can_manage_a_projects()
     {
 //        $this->withoutExceptionHandling();
         $this->be(factory('App\User')->create());
+
+        $this->get('/projects/create')->assertStatus(200);
 
         $project = factory('App\Project')->raw(['user_id' => auth()->user()->id]);
         $this->post('/projects', $project);
