@@ -9,11 +9,28 @@ use Tests\TestCase;
 class ProjectsTest extends TestCase
 {
     use RefreshDatabase;
+
+    /** @test */
+    public function guest_cannot_create_a_projects()
+    {
+//        $this->withoutExceptionHandling();
+        $project = factory('App\Project')->raw();
+
+        $this->post('/projects', $project)->assertRedirect('/login');
+    }
+
+    /** @test */
+    public function guest_cannot_view_a_projects()
+    {
+        $project = factory('App\Project')->create();
+        $this->get($project->path())->assertRedirect('/login');
+    }
+
     /**
      * @test
      * @return void
      */
-    public function a_user_can_create_a_project()
+    public function only_authenticated_users_can_create_projects()
     {
 //        $this->withoutExceptionHandling();
         $this->be(factory('App\User')->create());
@@ -25,37 +42,20 @@ class ProjectsTest extends TestCase
     }
 
     /** @test */
-    public function a_project_requires_a_title()
+    public function a_project_requires_a_data()
     {
 //        $this->withoutExceptionHandling();
         $this->be(factory('App\User')->create());
-        $project = factory('App\Project')->raw(['title' => '']);
+        $project = factory('App\Project')->raw([
+            'title' => '',
+            'description' => ''
+            ]);
 
-        $this->post('/projects', $project)->assertSessionHasErrors('title');
+        $this->post('/projects', $project)->assertSessionHasErrors(['title', 'description']);
     }
 
     /** @test */
-    public function a_project_requires_a_description()
-    {
-//        $this->withoutExceptionHandling();
-        $this->be(factory('App\User')->create());
-        $project = factory('App\Project')->raw(['description' => '']);
-
-        $this->post('/projects', $project)->assertSessionHasErrors('description');
-    }
-    /** @test */
-    public function a_project_requires_an_owner()
-    {
-//        $this->withoutExceptionHandling();
-//        $this->be(factory('App\User')->create());
-        $project = factory('App\Project')->raw();
-
-        $this->post('/projects', $project)->assertRedirect('/login');
-    }
-
-
-    /** @test */
-    public function a_user_can_view_a_project()
+    public function authenticated_user_can_view_a_project()
     {
 //        $this->withoutExceptionHandling();
         $this->be(factory('App\User')->create());
@@ -64,5 +64,15 @@ class ProjectsTest extends TestCase
         $this->get($project->path())
             ->assertSee($project->title)
             ->assertSee($project->desciption);
+    }
+
+    /** @test */
+    public function authenticated_user_cannot_view_the_projects_of_others()
+    {
+        $this->be(factory('App\User')->create());
+
+        $project = factory('App\Project')->create();
+
+        $this->get($project->path())->assertStatus(403);
     }
 }
