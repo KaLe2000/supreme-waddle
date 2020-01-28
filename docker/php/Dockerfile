@@ -65,14 +65,16 @@ RUN docker-php-ext-install \
     xml \
     zip
 
+WORKDIR /var/www
+
 # Install composer
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
-
+COPY . /var/www
 # Install PHP_CodeSniffer
 RUN composer global require "squizlabs/php_codesniffer=*"
 
 # Cleanup dev dependencies
 RUN apk del -f .build-deps
 
-# Setup working directory
-WORKDIR /var/www
+#
+RUN chmod -R 777 /var/www/storage/ /var/www/bootstrap/cache

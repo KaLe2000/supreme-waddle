@@ -5,17 +5,20 @@ PHPractice with Laravel.
 
 To start a project:
 ```bash
-docker-compose up -d
+cp .env.example .env
 composer install
-phpunit
+npm install && npm run dev
+docker-compose up -d --build
+php artisan key:generate
 php artisan migrate --seed
-php artisan ide-helper:generate 
+php artisan ide-helper:generate
+./vendor/bin/phpunit 
 ```
 
 
 **TODO backend:**
 - [x] Init project
-- [x] Init Docker
+- [ ] Write bashscript for correct start a project with Docker
 - [ ] Create first tests and models
 
 **TODO frontend:**
