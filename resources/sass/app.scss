@@ -2,13 +2,18 @@
 
 @import "tailwindcss/components";
 
+.button {
+  @apply .bg-purple-600 .rounded-lg .py-2 .px-5 .text-center;
+  box-shadow: 0px 0px 15px 0px rgba(0, 0, 0, 0.6);
+}
+
 @import "tailwindcss/utilities";
 
 // Fonts
-@import url('https://fonts.googleapis.com/css?family=Nunito');
+//@import url('https://fonts.googleapis.com/css?family=Nunito');
 
 // Variables
 @import 'variables';
 
 // Bootstrap
-@import '~bootstrap/scss/bootstrap';
+//@import '~bootstrap/scss/bootstrap';
