@@ -32,7 +32,7 @@ class ManageProjectsTest extends TestCase
     public function only_authenticated_users_can_manage_a_projects()
     {
 //        $this->withoutExceptionHandling();
-        $this->be(factory('App\User')->create());
+        $this->signIn();
 
         $this->get('/projects/create')->assertStatus(200);
 
@@ -46,7 +46,7 @@ class ManageProjectsTest extends TestCase
     public function a_project_requires_a_data()
     {
 //        $this->withoutExceptionHandling();
-        $this->be(factory('App\User')->create());
+        $this->signIn();
         $project = factory('App\Project')->raw([
             'title' => '',
             'description' => ''
@@ -59,7 +59,7 @@ class ManageProjectsTest extends TestCase
     public function authenticated_user_can_view_a_project()
     {
 //        $this->withoutExceptionHandling();
-        $this->be(factory('App\User')->create());
+        $this->signIn();
         $project = factory('App\Project')->create(['user_id' => auth()->user()->id]);
 
         $this->get($project->path())
@@ -70,7 +70,7 @@ class ManageProjectsTest extends TestCase
     /** @test */
     public function authenticated_user_cannot_view_the_projects_of_others()
     {
-        $this->be(factory('App\User')->create());
+        $this->signIn();
 
         $project = factory('App\Project')->create();
 

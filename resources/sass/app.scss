@@ -2,9 +2,17 @@
 
 @import "tailwindcss/components";
 
+.section {
+  @apply .px-4;
+}
+
 .button {
   @apply .bg-purple-600 .rounded-lg .py-2 .px-5 .text-center;
   box-shadow: 0px 0px 15px 0px rgba(0, 0, 0, 0.6);
+}
+
+.card {
+  @apply .bg-gray-700 .p-5 .rounded .shadow;
 }
 
 @import "tailwindcss/utilities";

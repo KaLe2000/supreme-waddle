@@ -20,6 +20,8 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('/projects/create', 'ProjectController@create')->name('projects.create');
     Route::post('/projects', 'ProjectController@store')->name('projects.store');
     Route::get('/projects/{project}', 'ProjectController@show')->name('projects.show');
+
+    Route::post('/projects/{project}/tasks', 'ProjectTasksController@store')->name('tasks.store');
 });
 
 Auth::routes();
