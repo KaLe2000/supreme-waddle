@@ -9,9 +9,14 @@ class ProjectTasksController extends Controller
 {
     public function store(Project $project)
     {
-        $project->addTask(request()->validate([
+        // create the policy like in ProjectController
+        abort_if(auth()->id() != $project->user_id, 403);
+
+        request()->validate([
             'body' => 'required'
-        ]));
+        ]);
+
+        $project->addTask(request('body'));
 
         return redirect($project->path());
     }

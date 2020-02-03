@@ -34,13 +34,13 @@ class ProjectController extends Controller
 
     public function store()
     {
-        auth()->user()->projects()->create(
+        $project = auth()->user()->projects()->create(
             \request()->validate([
                 'title' => 'required',
                 'description' => 'required'
             ])
         );
 
-        return redirect('/projects');
+        return redirect($project->path());
     }
 }

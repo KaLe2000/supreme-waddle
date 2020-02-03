@@ -16,11 +16,17 @@
                 <div class="mb-8">
                     <h2 class="text-purple-500 text-2xl mb-3">Tasks</h2>
 
-                    @forelse($project->tasks as $task)
+                    @foreach($project->tasks as $task)
                         <div class="card mb-3">{{ $task->body }}</div>
-                    @empty
-                        <div class="card mb-3">Lorem ipsum.</div>
-                    @endforelse
+                    @endforeach
+                    <div class="card mb-3">
+                        <form action="{{ route('tasks.store', $project->id) }}" method="POST">
+                            @csrf
+                            <input type="text" name="body" class="w-full bg-gray-700"
+                                   placeholder="Add new task..."
+                                   value="{{ old('body') }}">
+                        </form>
+                    </div>
                 </div>
                 <div>
                     <h2 class="text-purple-500 text-2xl mb-3">General Notes</h2>
