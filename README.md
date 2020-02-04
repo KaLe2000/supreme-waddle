@@ -28,4 +28,5 @@ php artisan ide-helper:generate
 Model | Migration & Seeder | Tests | Views
 ------------ | ------------- | ------------- | -------------
 Project | + | + | -
+Task | + | + | -
 User | + | - | -
