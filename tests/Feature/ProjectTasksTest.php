@@ -4,6 +4,8 @@ namespace Tests\Feature;
 
 use Carbon\Carbon;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+//This is Laravel Facades trick
+use Facades\Tests\Setup\ProjectFactory; // Real path is Tests\Setup\ProjectFactory
 use Tests\TestCase;
 
 class ProjectTasksTest extends TestCase
@@ -34,17 +36,14 @@ class ProjectTasksTest extends TestCase
     /** @test */
     public function only_the_project_owner_may_update_a_tasks()
     {
-//        $this->withoutExceptionHandling();
-        $this->signIn();
+        $project = ProjectFactory::withTasks(1)->create();
 
-        $project = factory('App\Project')->create();
-        $task = $project->addTask('test task');
-
-        $this->patch($task->path(), [
+        $this->be($project->user)
+            ->patch($project->tasks[0]->path(), [
             'body' => 'changed test'
         ])
-            ->assertStatus(403);
-        $this->assertDatabaseMissing('tasks', [
+            ->assertRedirect($project->path());
+        $this->assertDatabaseHas('tasks', [
             'body' => 'changed test'
         ]);
     }
