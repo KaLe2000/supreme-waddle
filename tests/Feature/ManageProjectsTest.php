@@ -2,6 +2,7 @@
 
 namespace Tests\Feature;
 
+use App\Project;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
@@ -39,7 +40,19 @@ class ManageProjectsTest extends TestCase
         $project = factory('App\Project')->raw(['user_id' => auth()->user()->id]);
         $this->post('/projects', $project);
         $this->assertDatabaseHas('projects', $project);
-        $this->get('/projects')->assertSee($project['title']);
+
+        $project = Project::where($project)->first();
+        $this->get($project->path())
+            ->assertSee($project['title'])
+            ->assertSee($project['notes']);
+
+        $this->patch($project->path(), [
+            'notes' => 'Test general notes'
+        ])->assertRedirect($project->path());
+
+        $this->assertDatabaseHas('projects', [
+            'notes' => 'Test general notes'
+        ]);
     }
 
     /** @test */

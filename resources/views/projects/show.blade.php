@@ -41,15 +41,30 @@
                 <div>
                     <h2 class="text-purple-500 text-2xl mb-3">General Notes</h2>
 
-                    <textarea class="card w-full">Lorem ipsum.</textarea>
+                    <form action="{{ route('projects.update', $project) }}" method="POST">
+                        @csrf
+                        @method('PATCH')
+                        <textarea
+                                class="card w-full mb-4"
+                                name="notes"
+                                placeholder="Anything special that you want to make a note of?"
+                        >{{ $project->notes }}</textarea>
+                        <button type="submit" class="button">
+                            Save
+                        </button>
+                    </form>
                 </div>
             </div>
 
 
             <div class="lg:w-1/4 px-3">
-                @include ('projects.card')
-                <a href="{{ route('projects.index') }}">Go Back</a>
+                <div class="mt-12">
+                    @include ('projects.card')
+                </div>
             </div>
+        </div>
+        <div>
+            <a href="{{ route('projects.index') }}">Go Back</a>
         </div>
     </main>
 @endsection

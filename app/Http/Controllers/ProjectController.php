@@ -9,7 +9,7 @@ class ProjectController extends Controller
 {
     public function index()
     {
-        $projects = Project::all();
+        $projects = auth()->user()->projects;
         return view('projects.index', compact('projects'));
     }
 
@@ -21,9 +21,10 @@ class ProjectController extends Controller
 //        }
 //        OR
 //        abort_if(auth()->user()->isNot($project->user_id), 403);
-        if (\Gate::denies('can-view', $project)) {
-            abort(403);
-        }
+//        if (\Gate::denies('can-view', $project)) {
+//            abort(403);
+//        }
+        $this->authorize('view', $project);
         return view('projects.show', compact('project'));
     }
 
@@ -37,9 +38,19 @@ class ProjectController extends Controller
         $project = auth()->user()->projects()->create(
             \request()->validate([
                 'title' => 'required',
-                'description' => 'required'
+                'description' => 'required',
+                'notes' => 'min:3',
             ])
         );
+
+        return redirect($project->path());
+    }
+
+    public function update(Project $project)
+    {
+        $this->authorize('view', $project);
+        abort_if(auth()->id() !=  $project->user_id, 403);
+        $project->update(\request()->all());
 
         return redirect($project->path());
     }

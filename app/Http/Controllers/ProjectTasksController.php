@@ -10,8 +10,7 @@ class ProjectTasksController extends Controller
 {
     public function store(Project $project)
     {
-        // create the policy like in ProjectController
-        abort_if(auth()->id() != $project->user_id, 403);
+        $this->authorize('view', $project);
 
         request()->validate([
             'body' => 'required'
@@ -24,7 +23,7 @@ class ProjectTasksController extends Controller
 
     public function update(Project $project, Task $task)
     {
-        abort_if(auth()->id() != $project->user_id, 403);
+        $this->authorize('view', $project);
 
         request()->validate([
             'body' => 'required'
