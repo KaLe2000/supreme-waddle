@@ -4,7 +4,7 @@ namespace Tests\Feature;
 
 use Carbon\Carbon;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-//This is Laravel Facades trick
+//This is Laravel Facades trick, now we can call methods statically
 use Facades\Tests\Setup\ProjectFactory; // Real path is Tests\Setup\ProjectFactory
 use Tests\TestCase;
 
@@ -15,7 +15,7 @@ class ProjectTasksTest extends TestCase
     /** @test */
     public function guests_cannot_add_tasks_to_projects()
     {
-        $project = factory('App\Project')->create();
+        $project = ProjectFactory::create();
 
         $this->post($project->path() . '/tasks')->assertRedirect('login');
     }
@@ -24,8 +24,7 @@ class ProjectTasksTest extends TestCase
     public function only_the_project_owner_may_add_tasks()
     {
         $this->signIn();
-
-        $project = factory('App\Project')->create();
+        $project = ProjectFactory::ownedBy(factory('App\User')->create())->create();
         $task = factory('App\Task')->raw(['project_id' => $project->id]);
 
         $this->post($project->path() . '/tasks', $task)
@@ -51,17 +50,11 @@ class ProjectTasksTest extends TestCase
     /** @test */
     public function a_project_can_have_tasks()
     {
-//        $this->withoutExceptionHandling();
-        $this->signIn();
+        $project = ProjectFactory::create();
 
-        $project = auth()->user()->projects()->create(
-            factory('App\Project')->raw()
-        );
-        $task = factory('App\Task')->raw(['project_id' => $project->id]);
-
-//        dd(auth()->id(), $project->id, $task);
-
-        $this->post($project->path() . '/tasks', $task);
+        $task = ['body' => 'Test task'];
+        $this->be($project->user)
+            ->post($project->path() . '/tasks', $task);
 
         $this->assertDatabaseHas('tasks', $task);
         $this->get($project->path())
@@ -71,17 +64,11 @@ class ProjectTasksTest extends TestCase
     /** @test */
     public function a_task_can_be_updated()
     {
-
-//        $this->withoutExceptionHandling();
-        $this->signIn();
-
-        $project = auth()->user()->projects()->create(
-            factory('App\Project')->raw()
-        );
-
+        $project = ProjectFactory::create();
         $task = $project->addTask('test task');
 
-        $this->patch($task->path(), [
+        $this->be($project->user)
+            ->patch($task->path(), [
             'body' => 'test change',
             'completed_at' => true
         ]);
@@ -95,17 +82,12 @@ class ProjectTasksTest extends TestCase
     /** @test */
     public function a_task_requires_a_body()
     {
-        $this->signIn();
-
-        $project = auth()->user()->projects()->create(
-            factory('App\Project')->raw()
-        );
+        $project = ProjectFactory::create();
 
         $task = factory('App\Task')->raw(['body' => '']);
 
-//        dd($task);
-
-        $this->post($project->path() . '/tasks', $task)
+        $this->be($project->user)
+            ->post($project->path() . '/tasks', $task)
         ->assertSessionHasErrors('body');
     }
 }

@@ -4,7 +4,8 @@ namespace Tests\Feature;
 
 use App\Project;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Foundation\Testing\WithFaker;
+//This is Laravel Facades trick, now we can call methods statically
+use Facades\Tests\Setup\ProjectFactory; // Real path is Tests\Setup\ProjectFactory
 use Tests\TestCase;
 
 class ManageProjectsTest extends TestCase
@@ -14,15 +15,11 @@ class ManageProjectsTest extends TestCase
     /** @test */
     public function guest_cannot_manage_the_projects()
     {
-//        $this->withoutExceptionHandling();
         $project = factory('App\Project')->create();
 
         $this->get('/projects')->assertRedirect('/login');
-
         $this->get('/projects/create')->assertRedirect('/login');
-
         $this->get($project->path())->assertRedirect('/login');
-
         $this->post('/projects', $project->toArray())->assertRedirect('/login');
     }
 
@@ -32,7 +29,6 @@ class ManageProjectsTest extends TestCase
      */
     public function only_authenticated_users_can_manage_a_projects()
     {
-//        $this->withoutExceptionHandling();
         $this->signIn();
 
         $this->get('/projects/create')->assertStatus(200);
@@ -58,7 +54,6 @@ class ManageProjectsTest extends TestCase
     /** @test */
     public function a_project_requires_a_data()
     {
-//        $this->withoutExceptionHandling();
         $this->signIn();
         $project = factory('App\Project')->raw([
             'title' => '',
@@ -71,11 +66,10 @@ class ManageProjectsTest extends TestCase
     /** @test */
     public function authenticated_user_can_view_a_project()
     {
-//        $this->withoutExceptionHandling();
-        $this->signIn();
-        $project = factory('App\Project')->create(['user_id' => auth()->user()->id]);
+        $project = ProjectFactory::create();
 
-        $this->get($project->path())
+        $this->be($project->user)
+            ->get($project->path())
             ->assertSee($project->title)
             ->assertSee($project->desciption);
     }
