@@ -6,7 +6,7 @@
             <p class="text-lg text-purple-500">
                 <a href="{{ route('projects.index') }}">My Projects</a> / {{ $project->title }}
             </p>
-            <a class="button" href="{{ route('projects.create') }}">New Project</a>
+            <a class="button" href="{{ route('projects.edit', $project) }}">Edit Project</a>
         </div>
     </header>
 

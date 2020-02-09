@@ -35,23 +35,31 @@ class ProjectController extends Controller
 
     public function store()
     {
-        $project = auth()->user()->projects()->create(
-            \request()->validate([
-                'title' => 'required',
-                'description' => 'required',
-                'notes' => 'min:3',
-            ])
-        );
+        $project = auth()->user()->projects()->create($this->validateRequest());
 
         return redirect($project->path());
+    }
+
+    public function edit(Project $project)
+    {
+        return view('projects.edit', compact('project'));
     }
 
     public function update(Project $project)
     {
         $this->authorize('view', $project);
         abort_if(auth()->id() !=  $project->user_id, 403);
-        $project->update(\request()->all());
+        $project->update($this->validateRequest());
 
         return redirect($project->path());
+    }
+
+    public function validateRequest()
+    {
+        return \request()->validate([
+            'title' => 'required',
+            'description' => 'required',
+            'notes' => 'min:3',
+        ]);
     }
 }
