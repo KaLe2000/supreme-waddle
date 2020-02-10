@@ -53,6 +53,15 @@
                             Save
                         </button>
                     </form>
+                    @if ($errors->any())
+                        <ul class="field mt-6">
+                            @foreach($errors->all() as $error)
+                                <li class="text-sm text-black">
+                                    {{ $error }}
+                                </li>
+                            @endforeach
+                        </ul>
+                    @endif
                 </div>
             </div>
 

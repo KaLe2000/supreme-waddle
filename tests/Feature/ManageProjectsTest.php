@@ -57,6 +57,15 @@ class ManageProjectsTest extends TestCase
             'description' => 'Test',
             'notes' => 'Test general notes'
         ]);
+
+        $this->patch($project->path(), [
+            'notes' => 'Another Test general notes'
+        ])->assertRedirect($project->path());
+
+
+        $this->assertDatabaseHas('projects', [
+            'notes' => 'Another Test general notes'
+        ]);
     }
 
     /** @test */
