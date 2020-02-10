@@ -23,10 +23,14 @@ php artisan ide-helper:generate
 
 **TODO frontend:**
 - [ ] Create a layout
-- [ ] Create a basic views for existing controllers
+- [x] Create a basic views for existing controllers
 
 Model | Migration & Seeder | Tests | Views
 ------------ | ------------- | ------------- | -------------
 Project | + | + | -
 Task | + | + | -
 User | + | - | -
+Activity | + | + | x
+
+**FIXME**
+Check Policies & Validations
