@@ -29,26 +29,57 @@ class Project extends Model
 {
     protected $guarded = [];
 
+    /**
+     * The path to the project.
+     * @return string
+     */
     public function path()
     {
         return '/projects/' . $this->id;
     }
 
+    /**
+     * Add a task to the project.
+     * @param $body
+     * @return Model
+     */
     public function addTask($body)
     {
         return $this->tasks()->create(compact('body'));
     }
 
+    /**
+     * Record activity for a project.
+     * @param $description
+     * @return Model
+     */
+    public function recordActivity($description)
+    {
+        return $this->activity()->create(['description' => $description]);
+    }
+
+    /**
+     * The activity feed for the project.
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
     public function activity()
     {
         return $this->hasMany('App\Activity');
     }
 
+    /**
+     * The owner of the project.
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
     public function user()
     {
         return $this->belongsTo('App\User');
     }
 
+    /**
+     * The tasks associated with the project.
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
     public function tasks()
     {
         return $this->hasMany('App\Task');

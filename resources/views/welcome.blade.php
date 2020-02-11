@@ -85,9 +85,13 @@
                 </div>
 
                 <div class="links">
-                    <a href="{{ route('projects.index') }}">Home</a>
-                    <a href="{{ route('login') }}">Login</a>
-                    <a href="{{ route('register') }}">Register</a>
+                    @auth
+                        <a href="{{ route('projects.index') }}">Home</a>
+                    @else
+                        <a href="{{ route('login') }}">Login</a>
+                        <a href="{{ route('register') }}">Register</a>
+                    @endauth
+
                     <a target="_blank" href="https://github.com/KaLe2000/supreme-waddle">GitHub</a>
                 </div>
             </div>

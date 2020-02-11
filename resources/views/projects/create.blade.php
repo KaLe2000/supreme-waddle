@@ -7,7 +7,6 @@
         </h1>
 
         <form action="{{ route('projects.store') }}" method="POST">
-            @method('PATCH')
             @include ('projects._form', [
             'project' => new App\Project,
             'button' => 'Create Project'

@@ -23,16 +23,12 @@ class ProjectTasksController extends Controller
 
     public function update(Project $project, Task $task)
     {
+
         $this->authorize('view', $project);
 
-        request()->validate([
-            'body' => 'required'
-        ]);
+        $task->update(request()->validate(['body' => 'sometimes|required']));
 
-        $task->update([
-            'body' => request('body'),
-            'completed_at' => request()->has('completed_at') ? Carbon::now() : null
-        ]);
+        request('completed_at') ? $task->complete() : $task->incomplete();
 
         return redirect($project->path());
     }

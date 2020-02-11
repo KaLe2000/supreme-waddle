@@ -64,11 +64,25 @@ class ProjectTasksTest extends TestCase
     /** @test */
     public function a_task_can_be_updated()
     {
-        $project = ProjectFactory::create();
-        $task = $project->addTask('test task');
+        $project = ProjectFactory::withTasks(1)->create();
 
         $this->be($project->user)
-            ->patch($task->path(), [
+            ->patch($project->tasks[0]->path(), [
+            'body' => 'test change'
+        ]);
+
+        $this->assertDatabaseHas('tasks', [
+            'body' => 'test change'
+        ]);
+    }
+
+    /** @test */
+    public function a_task_can_be_completed()
+    {
+        $project = ProjectFactory::withTasks(1)->create();
+
+        $this->be($project->user)
+            ->patch($project->tasks[0]->path(), [
             'body' => 'test change',
             'completed_at' => true
         ]);
@@ -76,6 +90,28 @@ class ProjectTasksTest extends TestCase
         $this->assertDatabaseHas('tasks', [
             'body' => 'test change',
             'completed_at' => Carbon::now()
+        ]);
+    }
+
+    /** @test */
+    public function a_task_can_be_incomplete()
+    {
+        $project = ProjectFactory::withTasks(1)->create();
+
+        $this->be($project->user)
+            ->patch($project->tasks[0]->path(), [
+            'body' => 'test change',
+            'completed_at' => true
+        ]);
+
+        $this->patch($project->tasks[0]->path(), [
+            'body' => 'test change',
+            'completed_at' => false
+        ]);
+
+        $this->assertDatabaseHas('tasks', [
+            'body' => 'test change',
+            'completed_at' => null
         ]);
     }
 
