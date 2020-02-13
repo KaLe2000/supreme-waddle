@@ -70,7 +70,11 @@
                 <div class="mt-12">
                     @include ('projects.card')
                 </div>
+                <div class="card mt-3">
+                    @include ('projects.activity.card')
+                </div>
             </div>
+
         </div>
         <div>
             <a href="{{ route('projects.index') }}">Go Back</a>
