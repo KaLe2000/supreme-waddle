@@ -28,6 +28,8 @@ class ProjectTasksController extends Controller
 
         $task->update(request()->validate(['body' => 'sometimes|required']));
 
+//        dump(request('completed_at'));
+
         request('completed_at') ? $task->complete() : $task->incomplete();
 
         return redirect($project->path());

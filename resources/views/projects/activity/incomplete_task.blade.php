@@ -1,1 +1,1 @@
-You change task status to incomplete
+You change {{ $activity->subject->body }} status to incomplete

@@ -3,6 +3,7 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Arr;
 
 /**
  * App\Project
@@ -28,6 +29,8 @@ use Illuminate\Database\Eloquent\Model;
 class Project extends Model
 {
     protected $guarded = [];
+
+    public $old = [];
 
     /**
      * The path to the project.
@@ -55,7 +58,21 @@ class Project extends Model
      */
     public function recordActivity($description)
     {
-        return $this->activity()->create(['description' => $description]);
+        return $this->activity()->create([
+            'description' => $description,
+            'changes' => $this->activityChanges()
+        ]);
+    }
+
+    public function activityChanges()
+    {
+        if ($this->wasChanged()) {
+            return [
+                'before' => Arr::except(array_diff($this->old,$this->getAttributes()), ['updated_at']),
+                'after' => Arr::except($this->getChanges(), ['updated_at'])
+            ];
+        }
+        return null;
     }
 
     /**

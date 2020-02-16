@@ -40,6 +40,28 @@ class Task extends Model
     }
 
     /**
+     * Record activity for a project.
+     * @param $description
+     * @return Model
+     */
+    public function recordActivity($description)
+    {
+        return $this->activity()->create([
+            'project_id' => $this->project_id,
+            'description' => $description
+        ]);
+    }
+
+    /**
+     * The activity feed for the project.
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function activity()
+    {
+        return $this->morphMany('App\Activity', 'subject')->latest();
+    }
+
+    /**
      * The project of the task.
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */

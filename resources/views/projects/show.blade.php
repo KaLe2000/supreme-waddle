@@ -21,7 +21,7 @@
                             @method('PATCH')
                             @csrf
                             <div class="card mb-3">
-                                <div class="flex">
+                                <div class="flex items-center">
                                     <input type="text" name="body" class="w-full bg-gray-700" value="{{ $task->body }}">
                                     <input {{ $task->completed_at ? 'checked' : '' }}
                                             type="checkbox" name="completed_at" onchange="this.form.submit()">

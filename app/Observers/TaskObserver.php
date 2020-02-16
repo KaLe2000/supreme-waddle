@@ -14,7 +14,7 @@ class TaskObserver
      */
     public function created(Task $task)
     {
-        $task->project->recordActivity('created_task', $task);
+        $task->recordActivity('created_task', $task);
     }
 
     /**
@@ -26,14 +26,14 @@ class TaskObserver
     public function updated(Task $task)
     {
         if (is_null($task->completed_at)) {
-            $task->project->recordActivity('incomplete_task', $task);
-            return;
+            $task->recordActivity('incomplete_task');
+        } else {
+            $task->recordActivity('completed_task');
         }
-        $task->project->recordActivity('completed_task', $task);
     }
 
     public function deleted(Task $task)
     {
-        $task->project->recordActivity('deleted_task', $task);
+        $task->recordActivity('deleted_task');
     }
 }
