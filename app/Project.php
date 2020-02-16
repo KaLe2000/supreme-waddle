@@ -2,8 +2,8 @@
 
 namespace App;
 
+use App\Traits\RecordsActivity;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Support\Arr;
 
 /**
  * App\Project
@@ -28,9 +28,9 @@ use Illuminate\Support\Arr;
  */
 class Project extends Model
 {
-    protected $guarded = [];
+    use RecordsActivity;
 
-    public $old = [];
+    protected $guarded = [];
 
     /**
      * The path to the project.
@@ -52,39 +52,6 @@ class Project extends Model
     }
 
     /**
-     * Record activity for a project.
-     * @param $description
-     * @return Model
-     */
-    public function recordActivity($description)
-    {
-        return $this->activity()->create([
-            'description' => $description,
-            'changes' => $this->activityChanges()
-        ]);
-    }
-
-    public function activityChanges()
-    {
-        if ($this->wasChanged()) {
-            return [
-                'before' => Arr::except(array_diff($this->old,$this->getAttributes()), ['updated_at']),
-                'after' => Arr::except($this->getChanges(), ['updated_at'])
-            ];
-        }
-        return null;
-    }
-
-    /**
-     * The activity feed for the project.
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany
-     */
-    public function activity()
-    {
-        return $this->hasMany('App\Activity')->latest();
-    }
-
-    /**
      * The owner of the project.
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
@@ -100,5 +67,14 @@ class Project extends Model
     public function tasks()
     {
         return $this->hasMany('App\Task');
+    }
+
+    /**
+     * The activity feed for the project.
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function activity()
+    {
+        return $this->hasMany('App\Activity')->latest();
     }
 }

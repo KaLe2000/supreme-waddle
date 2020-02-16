@@ -2,17 +2,25 @@
 
 namespace App;
 
+use App\Traits\RecordsActivity;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 
 class Task extends Model
 {
+    use RecordsActivity;
+
     protected $guarded = [];
 
     /**
      * Task touch his project (updated_at).
      * */
     protected $touches = ['project'];
+
+    /**
+     * Uses in RecordActivity Trait
+     * */
+    protected static $recordableEvents = ['created', 'deleted'];
 
     /**
      * The path of the task/
@@ -37,28 +45,6 @@ class Task extends Model
     public function complete()
     {
         $this->update(['completed_at' => Carbon::now()]);
-    }
-
-    /**
-     * Record activity for a project.
-     * @param $description
-     * @return Model
-     */
-    public function recordActivity($description)
-    {
-        return $this->activity()->create([
-            'project_id' => $this->project_id,
-            'description' => $description
-        ]);
-    }
-
-    /**
-     * The activity feed for the project.
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany
-     */
-    public function activity()
-    {
-        return $this->morphMany('App\Activity', 'subject')->latest();
     }
 
     /**
