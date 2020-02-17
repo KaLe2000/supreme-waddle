@@ -1,1 +1,1 @@
-You change {{ $activity->subject->body }} status to incomplete
+{{ $activity->user->name }} change {{ $activity->subject->body }} status to incomplete

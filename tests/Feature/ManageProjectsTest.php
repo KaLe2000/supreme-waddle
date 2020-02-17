@@ -22,6 +22,7 @@ class ManageProjectsTest extends TestCase
         $this->get($project->path())->assertRedirect('/login');
         $this->get($project->path() . '/edit')->assertRedirect('/login');
         $this->post('/projects', $project->toArray())->assertRedirect('/login');
+        $this->delete($project->path())->assertRedirect('/login');
     }
 
     /**
@@ -66,6 +67,11 @@ class ManageProjectsTest extends TestCase
         $this->assertDatabaseHas('projects', [
             'notes' => 'Another Test general notes'
         ]);
+
+        $this->delete($project->path())
+            ->assertRedirect('/projects');
+
+        $this->assertDatabaseMissing('projects', $project->only('id'));
     }
 
     /** @test */

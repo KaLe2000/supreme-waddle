@@ -37,6 +37,8 @@ class Task extends Model
     public function incomplete()
     {
         $this->update(['completed_at' => null]);
+
+        $this->recordActivity('incomplete_task');
     }
 
     /**
@@ -45,6 +47,8 @@ class Task extends Model
     public function complete()
     {
         $this->update(['completed_at' => Carbon::now()]);
+
+        $this->recordActivity('completed_task');
     }
 
     /**

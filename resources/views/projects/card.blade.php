@@ -2,7 +2,17 @@
     <h3 class="font-normal text-xl py-4 -ml-5 mb-3 border-l-4 border-purple-600 pl-4">
         <a href="{{ $project->path() }}">{{ $project->title }}</a>
     </h3>
-    <div class="text-gray-500">
+    <div class="text-gray-500 mb-4">
         {{ Str::limit($project->description, 100) }}
     </div>
+
+    <footer>
+        <form action="{{ route('projects.destroy', $project) }}" method="POST" class="text-right">
+            @csrf
+            @method('DELETE')
+            <button type="submit" class="text-xs">
+                Delete
+            </button>
+        </form>
+    </footer>
 </div>

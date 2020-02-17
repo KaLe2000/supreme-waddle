@@ -71,7 +71,7 @@ class TriggerActivityTest extends TestCase
             'completed_at' => true
         ]);
 
-        $this->assertCount(2, $project->activity);
+        $this->assertCount(3, $project->activity);
 
         tap($project->activity->last(), function($activity) {
 //            $this->assertEquals('completed_task', $activity->description);
@@ -93,7 +93,7 @@ class TriggerActivityTest extends TestCase
             'completed_at' => false
         ]);
 
-        $this->assertCount(2, $project->activity);
+        $this->assertCount(3, $project->activity);
 
         $this->be($project->user)->patch($project->tasks->last()->path(), [
             'body' => 'test body 2'

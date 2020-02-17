@@ -48,10 +48,19 @@ class ProjectController extends Controller
     public function update(Project $project)
     {
         $this->authorize('view', $project);
-        abort_if(auth()->id() !=  $project->user_id, 403);
+//        abort_if(auth()->id() !=  $project->user_id, 403);
         $project->update($this->validateRequest());
 
         return redirect($project->path());
+    }
+
+    public function destroy(Project $project)
+    {
+        $this->authorize('view', $project);
+
+        $project->delete();
+
+        return redirect(route('projects.index'));
     }
 
     protected function validateRequest()
