@@ -3,6 +3,7 @@
 namespace App;
 
 use Illuminate\Contracts\Auth\MustVerifyEmail;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 
@@ -31,7 +32,7 @@ use Illuminate\Notifications\Notifiable;
  * @method static \Illuminate\Database\Eloquent\Builder|\App\User whereRememberToken($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\User whereUpdatedAt($value)
  * @mixin \Eloquent
- * @property-read \Illuminate\Database\Eloquent\Collection|\App\Project[] $projects
+ * @property-read Collection|\App\Project[] $projects
  * @property-read int|null $projects_count
  */
 class User extends Authenticatable
@@ -64,6 +65,14 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
+
+    public function accessibleProjects()
+    {
+        return Project::where('user_id', $this->id)
+            ->orWhereHas('members', function ($query) {
+               $query->where('user_id', $this->id);
+            })->get();
+    }
 
     public function projects()
     {

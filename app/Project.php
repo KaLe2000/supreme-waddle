@@ -51,6 +51,16 @@ class Project extends Model
         return $this->tasks()->create(compact('body'));
     }
 
+    public function invite(User $user)
+    {
+        return $this->members()->attach($user);
+    }
+
+    public function members()
+    {
+        return $this->belongsToMany('App\User', 'project_members')->withTimestamps();
+    }
+
     /**
      * The owner of the project.
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
