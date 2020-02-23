@@ -66,6 +66,16 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
     ];
 
+    public function getGravatarAttribute()
+    {
+        $email = md5($this->email);
+
+        return "https://gravatar.com/avatar/{$email}" . http_build_query([
+                's' => '60',
+//                'd' => 'https://s3.amazonaws.com/laracasts/images/default-square-avatar.jpg'
+            ]);
+    }
+
     public function accessibleProjects()
     {
         return Project::where('user_id', $this->id)
