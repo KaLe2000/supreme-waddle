@@ -28,6 +28,18 @@ class ProjectPolicy
      * @param  \App\Project  $project
      * @return mixed
      */
+    public function manage(User $user, Project $project)
+    {
+        return $user->id == $project->user_id;
+    }
+
+    /**
+     * Determine whether the user can view the project.
+     *
+     * @param  \App\User  $user
+     * @param  \App\Project  $project
+     * @return mixed
+     */
     public function view(User $user, Project $project)
     {
         return $user->id == $project->user_id || $project->members->contains($user);

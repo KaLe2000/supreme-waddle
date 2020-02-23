@@ -12,12 +12,13 @@
                         src="{{ $project->user->gravatar }}"
                         alt="Project owner: {{ $project->user->name }}'s avatar"
                         class="rounded-full w-8 mr-2">
-                @foreach ($project->members as $member)
+                @forelse ($project->members as $member)
                     <img
                             src="{{ $member->gravatar }}"
                             alt="{{ $member->name }}'s avatar"
                             class="rounded-full w-8 mr-2">
-                @endforeach
+                    @empty
+                @endforelse
 
                 <a class="button ml-6" href="{{ route('projects.edit', $project) }}">Edit Project</a>
             </div>
@@ -67,15 +68,7 @@
                             Save
                         </button>
                     </form>
-                    @if ($errors->any())
-                        <ul class="field mt-6">
-                            @foreach($errors->all() as $error)
-                                <li class="text-sm text-black">
-                                    {{ $error }}
-                                </li>
-                            @endforeach
-                        </ul>
-                    @endif
+                    @include ('projects.errors')
                 </div>
             </div>
 
@@ -87,11 +80,13 @@
                 <div class="card mt-3">
                     @include ('projects.activity.card')
                 </div>
+                @can ('manage', $project)
+                <div class="card flex flex-col mt-3">
+                    @include ('projects.invite')
+                </div>
+                @endcan
             </div>
 
-        </div>
-        <div>
-            <a href="{{ route('projects.index') }}">Go Back</a>
         </div>
     </main>
 @endsection
