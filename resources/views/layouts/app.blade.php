@@ -32,27 +32,29 @@
 
                     <div>
                         <!-- Right Side Of Navbar -->
-                        <ul class="navbar-nav ml-auto">
+                        <div class="navbar-nav ml-auto">
                             <!-- Authentication Links -->
                             @guest
-                                <li class="nav-item">
-                                    <a class="nav-link" href="{{ route('login') }}">{{ __('Login') }}</a>
-                                </li>
+                                <a class="nav-link" href="{{ route('login') }}">{{ __('Login') }}</a>
                                 @if (Route::has('register'))
-                                    <li class="nav-item">
-                                        <a class="nav-link" href="{{ route('register') }}">{{ __('Register') }}</a>
-                                    </li>
+                                    <a class="nav-link" href="{{ route('register') }}">{{ __('Register') }}</a>
                                 @endif
                             @else
-                                <li class="nav-item dropdown">
-                                    <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
-                                        {{ Auth::user()->name }} <span class="caret"></span>
+                                <div class="flex items-center">
+                                    <a id="navbarDropdown" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
+                                        <img
+                                                src="{{ Auth::user()->gravatar }}"
+                                                alt="Project owner: {{ Auth::user()->name }}'s avatar"
+                                                class="rounded-full w-8 mr-2">
                                     </a>
-
-                                    <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
+                                    <a href="#" class="mr-2" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
+                                        {{ Auth::user()->name }}
+                                    </a>
+                                    <div class="mr-2"> / </div>
+                                    <div class="text-red-500" aria-labelledby="navbarDropdown">
                                         <a class="dropdown-item" href="{{ route('logout') }}"
                                            onclick="event.preventDefault();
-                                                     document.getElementById('logout-form').submit();">
+                                                 document.getElementById('logout-form').submit();">
                                             {{ __('Logout') }}
                                         </a>
 
@@ -60,9 +62,9 @@
                                             @csrf
                                         </form>
                                     </div>
-                                </li>
+                                </div>
                             @endguest
-                        </ul>
+                        </div>
                     </div>
                 </div>
             </div>
