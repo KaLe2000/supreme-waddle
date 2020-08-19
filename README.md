@@ -5,23 +5,19 @@ PHPractice with Laravel.
 
 To start a project:
 ```bash
-cp .env.example .env
-composer install
-npm install && npm run dev
-docker-compose up -d --build
-php artisan key:generate
-php artisan ide-helper:generate
-php artisan migrate --seed
-./vendor/bin/phpunit 
+./ci up #creating docker containers, installing dependency, migrating DB
+./ci down #deleting containers
+./ci start #start containers
+./ci stop #stop containers
 ```
 
 
 **TODO backend:**
 - [x] Init project
 - [x] Create first tests and models
-- [ ] Write bashscript for correct start a project with Docker
+- [x] Write bashscript for correct start a project with Docker
 - [ ] Create "Invite Friend" functional
-- [ ] Add integration with Social's
+- [ ] Add integration with [Social's](https://github.com/SocialiteProviders/Providers)
 - [ ] Add valid SSL [Let's Encrypt](https://letsencrypt.org/)
 
 **TODO Social integration:**

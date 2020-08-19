@@ -1,0 +1,76 @@
+#!/usr/bin/env bash
+
+set -e
+
+init-after()     { : ; }
+
+init () {
+  # Init environment variables
+
+  if [[ -n $ENV_PATH ]]; then
+    cp $ENV_PATH .env
+  else
+    cp -n .env.example .env || true
+  fi
+
+  . ./.env
+
+  # Call the hook
+
+  init-after $@
+}
+
+up-containers() {
+  docker-compose up -d $@
+}
+
+down-containers() {
+  docker-compose down -v
+}
+
+prepare-laravel() { #docker-compose exec -T
+  PHP_CONTAINER_NAME=$(docker ps --format '{{.Names}}' | grep php)
+  docker exec -ti $PHP_CONTAINER_NAME /bin/bash -c 'php artisan key:generate'
+  docker exec -ti $PHP_CONTAINER_NAME /bin/bash -c 'php artisan ide-helper:generate'
+  docker exec -ti $PHP_CONTAINER_NAME /bin/bash -c 'php artisan migrate --seed'
+}
+
+up-before() { #docker-compose exec -T
+  composer install
+  npm install && npm run dev
+}
+
+up-after() {
+  prepare-laravel
+  puf $@
+}
+
+puf() { #phpunit --filter=ClassNameTest
+  ./vendor/bin/phpunit $@
+}
+
+up () {
+  up-before $@
+  up-containers $@
+  up-after $@
+}
+
+down() {
+  down-containers $@
+}
+
+start() {
+  docker-compose start $@
+}
+
+stop() {
+  docker-compose stop $@
+}
+
+# Initialization
+
+init $@
+
+# Run the function or the command
+
+$1 ${@:2}
