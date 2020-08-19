@@ -28,11 +28,12 @@ down-containers() {
   docker-compose down -v
 }
 
-prepare-laravel() { #docker-compose exec -T
+prepare-project() { #docker-compose exec -T
   PHP_CONTAINER_NAME=$(docker ps --format '{{.Names}}' | grep php)
   docker exec -ti $PHP_CONTAINER_NAME /bin/bash -c 'php artisan key:generate'
   docker exec -ti $PHP_CONTAINER_NAME /bin/bash -c 'php artisan ide-helper:generate'
   docker exec -ti $PHP_CONTAINER_NAME /bin/bash -c 'php artisan migrate --seed'
+  sudo chmod -R 777 storage/
 }
 
 up-before() { #docker-compose exec -T
@@ -41,7 +42,7 @@ up-before() { #docker-compose exec -T
 }
 
 up-after() {
-  prepare-laravel
+  prepare-project
   puf $@
 }
 

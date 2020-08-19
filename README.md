@@ -9,6 +9,7 @@ To start a project:
 ./ci down #deleting containers
 ./ci start #start containers
 ./ci stop #stop containers
+./ci puf | ./ci puf --filter=ClassNameTest #./vendor/phpunit $@
 ```
 
 
