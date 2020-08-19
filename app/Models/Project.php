@@ -1,8 +1,9 @@
 <?php
 
-namespace App;
+namespace App\Models;
 
-use App\Traits\RecordsActivity;
+use App\Models\Traits\RecordsActivity;
+use App\Models\User;
 use Illuminate\Database\Eloquent\Model;
 
 /**
@@ -24,7 +25,7 @@ use Illuminate\Database\Eloquent\Model;
  * @mixin \Eloquent
  * @property int $user_id
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Project whereUserId($value)
- * @property-read \App\User $user
+ * @property-read \App\Models\User $user
  */
 class Project extends Model
 {
@@ -58,7 +59,7 @@ class Project extends Model
 
     public function members()
     {
-        return $this->belongsToMany('App\User', 'project_members')->withTimestamps();
+        return $this->belongsToMany('App\Models\User', 'project_members')->withTimestamps();
     }
 
     /**
@@ -67,7 +68,7 @@ class Project extends Model
      */
     public function user()
     {
-        return $this->belongsTo('App\User');
+        return $this->belongsTo('App\Models\User');
     }
 
     /**
@@ -76,7 +77,7 @@ class Project extends Model
      */
     public function tasks()
     {
-        return $this->hasMany('App\Task');
+        return $this->hasMany('App\Models\Task');
     }
 
     /**
@@ -85,6 +86,6 @@ class Project extends Model
      */
     public function activity()
     {
-        return $this->hasMany('App\Activity')->latest();
+        return $this->hasMany('App\Models\Activity')->latest();
     }
 }

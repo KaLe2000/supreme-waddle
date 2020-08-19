@@ -8,7 +8,7 @@
 
         <form action="{{ route('projects.store') }}" method="POST">
             @include ('projects._form', [
-            'project' => new App\Project,
+            'project' => new \App\Models\Project,
             'button' => 'Create Project'
             ])
         </form>

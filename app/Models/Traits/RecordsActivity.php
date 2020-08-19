@@ -1,7 +1,7 @@
 <?php
 
 
-namespace App\Traits;
+namespace App\Models\Traits;
 
 
 use Illuminate\Database\Eloquent\Model;
@@ -80,7 +80,7 @@ trait RecordsActivity
      */
     public function activity()
     {
-        return $this->morphMany('App\Activity', 'subject')->latest();
+        return $this->morphMany('App\Models\Activity', 'subject')->latest();
     }
 
     /**

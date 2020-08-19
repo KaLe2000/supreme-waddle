@@ -15,7 +15,7 @@ class InvitationTest extends TestCase
     {
         $project = ProjectFactory::create();
 
-        $user = factory('App\User')->create();
+        $user = factory('App\Models\User')->create();
 
         $this->be($user)
             ->post($project->path() . '/invitations')
@@ -33,7 +33,7 @@ class InvitationTest extends TestCase
     {
         $project = ProjectFactory::create();
 
-        $userToInvite = factory('App\User')->create();
+        $userToInvite = factory('App\Models\User')->create();
 
         $this->be($project->user)->post($project->path() . '/invitations', [
             'email' => $userToInvite->email
@@ -58,7 +58,7 @@ class InvitationTest extends TestCase
     {
         $project = ProjectFactory::create();
 
-        $project->invite($newUser = factory('App\User')->create());
+        $project->invite($newUser = factory('App\Models\User')->create());
 
         $this->signIn($newUser);
         $this->post(route('tasks.store', $project), $task = ['body' => 'Test task']);

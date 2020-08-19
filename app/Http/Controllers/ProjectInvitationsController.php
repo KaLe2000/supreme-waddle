@@ -3,8 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\ProjectInvitationRequest;
-use App\Project;
-use App\User;
+use App\Models\Project;
+use App\Models\User;
 
 class ProjectInvitationsController extends Controller
 {

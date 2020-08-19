@@ -3,7 +3,7 @@
 /** @var \Illuminate\Database\Eloquent\Factory $factory */
 
 use App\Model;
-use App\Project;
+use App\Models\Project;
 use Faker\Generator as Faker;
 
 $factory->define(Project::class, function (Faker $faker) {
@@ -12,7 +12,7 @@ $factory->define(Project::class, function (Faker $faker) {
         'description' => $faker->paragraph,
         'notes' => $faker->paragraph,
         'user_id' => function () {
-            return factory('App\User')->create()->id;
+            return factory('App\Models\User')->create()->id;
         }
     ];
 });

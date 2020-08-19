@@ -24,8 +24,8 @@ class ProjectTasksTest extends TestCase
     public function only_the_project_owner_may_add_tasks()
     {
         $this->signIn();
-        $project = ProjectFactory::ownedBy(factory('App\User')->create())->create();
-        $task = factory('App\Task')->raw(['project_id' => $project->id]);
+        $project = ProjectFactory::ownedBy(factory('App\Models\User')->create())->create();
+        $task = factory('App\Models\Task')->raw(['project_id' => $project->id]);
 
         $this->post($project->path() . '/tasks', $task)
             ->assertStatus(403);
@@ -120,7 +120,7 @@ class ProjectTasksTest extends TestCase
     {
         $project = ProjectFactory::create();
 
-        $task = factory('App\Task')->raw(['body' => '']);
+        $task = factory('App\Models\Task')->raw(['body' => '']);
 
         $this->be($project->user)
             ->post($project->path() . '/tasks', $task)

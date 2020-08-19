@@ -1,7 +1,8 @@
 <?php
 
-namespace App;
+namespace App\Models;
 
+use App\Models\Project;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Foundation\Auth\User as Authenticatable;
@@ -32,7 +33,7 @@ use Illuminate\Notifications\Notifiable;
  * @method static \Illuminate\Database\Eloquent\Builder|\App\User whereRememberToken($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\User whereUpdatedAt($value)
  * @mixin \Eloquent
- * @property-read Collection|\App\Project[] $projects
+ * @property-read Collection|\App\Models\Project[] $projects
  * @property-read int|null $projects_count
  */
 class User extends Authenticatable
@@ -86,6 +87,6 @@ class User extends Authenticatable
 
     public function projects()
     {
-        return $this->hasMany('App\Project')->latest('updated_at');
+        return $this->hasMany('App\Models\Project')->latest('updated_at');
     }
 }

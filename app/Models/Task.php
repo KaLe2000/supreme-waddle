@@ -1,8 +1,9 @@
 <?php
 
-namespace App;
+namespace App\Models;
 
-use App\Traits\RecordsActivity;
+use App\Models\Project;
+use App\Models\Traits\RecordsActivity;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 

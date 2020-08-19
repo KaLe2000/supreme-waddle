@@ -2,7 +2,7 @@
 
 namespace Tests\Feature;
 
-use App\Project;
+use App\Models\Project;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 //This is Laravel Facades trick, now we can call methods statically
 use Facades\Tests\Setup\ProjectFactory; // Real path is Tests\Setup\ProjectFactory
@@ -15,7 +15,7 @@ class ManageProjectsTest extends TestCase
     /** @test */
     public function guest_cannot_manage_the_projects()
     {
-        $project = factory('App\Project')->create();
+        $project = factory('App\Models\Project')->create();
 
         $this->get('/projects')->assertRedirect('/login');
         $this->get('/projects/create')->assertRedirect('/login');
@@ -54,7 +54,7 @@ class ManageProjectsTest extends TestCase
 
         $this->get('/projects/create')->assertStatus(200);
 
-        $project = factory('App\Project')->raw(['user_id' => auth()->user()->id]);
+        $project = factory('App\Models\Project')->raw(['user_id' => auth()->user()->id]);
         $this->post('/projects', $project);
         $this->assertDatabaseHas('projects', $project);
 
@@ -107,7 +107,7 @@ class ManageProjectsTest extends TestCase
     public function a_project_requires_a_data()
     {
         $this->signIn();
-        $project = factory('App\Project')->raw([
+        $project = factory('App\Models\Project')->raw([
             'title' => '',
             'description' => ''
             ]);
@@ -131,7 +131,7 @@ class ManageProjectsTest extends TestCase
     {
         $this->signIn();
 
-        $project = factory('App\Project')->create();
+        $project = factory('App\Models\Project')->create();
 
         $this->get($project->path())->assertStatus(403);
     }

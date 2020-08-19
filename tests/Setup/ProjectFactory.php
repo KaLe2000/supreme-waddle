@@ -29,11 +29,11 @@ class ProjectFactory
 
     public function create()
     {
-        $project = factory('App\Project')->create([
-            'user_id' => $this->user ?? factory('App\User')
+        $project = factory('App\Models\Project')->create([
+            'user_id' => $this->user ?? factory('App\Models\User')
         ]);
 
-        factory('App\Task', $this->tasksCount)->create([
+        factory('App\Models\Task', $this->tasksCount)->create([
             'project_id' => $project->id
         ]);
 
