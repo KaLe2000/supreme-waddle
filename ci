@@ -29,16 +29,16 @@ down-containers() {
 }
 
 prepare-project() { #docker-compose exec -T
+  sudo chmod -R 777 storage/
   PHP_CONTAINER_NAME=$(docker ps --format '{{.Names}}' | grep php)
   docker exec -ti $PHP_CONTAINER_NAME /bin/bash -c 'php artisan key:generate'
   docker exec -ti $PHP_CONTAINER_NAME /bin/bash -c 'php artisan ide-helper:generate'
   docker exec -ti $PHP_CONTAINER_NAME /bin/bash -c 'php artisan migrate --seed'
-  sudo chmod -R 777 storage/
 }
 
 up-before() { #docker-compose exec -T
   composer install
-  npm install && npm run dev
+  npm install #&& npm run dev
 }
 
 up-after() {
